@@ -8,6 +8,7 @@ import axios from "axios";
 const HotCollections = () => {
 
   const [hotCollections, setHotCollections] = useState([]);
+  const [loading, setLoading] =useState()
 
   const state= {
     responsive:{
@@ -27,23 +28,27 @@ const HotCollections = () => {
 }
 
   async function getHotCollections() {
+    if(hotCollections.length <= 0) {
+      setLoading(true);
     const apiData = await axios.get('https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections');
 
-    setHotCollections(apiData.data);
+    if (loading) {
+      setHotCollections(apiData.data);
+    }
 
+    setLoading(false);
+    }
     
 
   }
-
 
   useEffect(() => {
     getHotCollections();
   }, []);
 
-  useEffect(() => {
-    console.log(hotCollections.length)
-  }, [hotCollections])
-
+  useEffect(() =>{
+    getHotCollections();
+  }, [loading])
 
 
   return (
@@ -57,7 +62,7 @@ const HotCollections = () => {
             </div>
           </div>
           <ReactOwlCarousel className="owl-theme hot-collections-carousel" loop nav margin={10} items={4} responsive={state.responsive}>
-          {hotCollections.length ? hotCollections.map((hotItem) => (
+          {!loading ? hotCollections.map((hotItem) => (
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12" key={hotItem.id}>
               <div className="nft_coll">
                 <div className="nft_wrap">
