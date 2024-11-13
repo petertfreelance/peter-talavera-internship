@@ -17,20 +17,35 @@ const Author = () => {
   const [pImage, setPImage] = useState('')
 
   async function getAuthorInfo() {
-    setLoading(true)
+    setLoading(true);
 
     if(id) {
-      const apiData = await axios.get(authorBaseApiUrl +73855012);
+      const apiData = await axios.get(authorBaseApiUrl +id.authorid);
+      setAuthorInfo(apiData.data)
 
-    console.log(apiData.data)
-
-    setAuthorInfo(apiData.data)
-
-    setNftCollections(apiData.data.nftCollection)
-    setPImage(apiData.data.authorImage);
-    setLoading(false)
+      setNftCollections(apiData.data.nftCollection)
+      setPImage(apiData.data.authorImage);
+      setLoading(false)
     }
 
+
+  }
+
+  function follow() {
+    const followers = document.getElementById('follower-count');
+    const btn = document.getElementById('follow-btn');
+
+    if(btn.classList.contains('follow')) {
+      followers.innerHTML = parseInt(followers.innerHTML) + 1;
+
+      btn.classList.remove("follow");
+      btn.innerHTML = "Unfollow"
+    } else {
+      followers.innerHTML = parseInt(followers.innerHTML) - 1;
+
+      btn.classList.add("follow");
+      btn.innerHTML = "Follow"
+    }
 
   }
 
@@ -38,9 +53,6 @@ const Author = () => {
     getAuthorInfo(authorInfo.nftCollection);
   }, [])
 
-  useEffect(() => {
-    
-  }, [authorInfo])
 
   return (
     <div id="wrapper">
@@ -59,8 +71,7 @@ const Author = () => {
           <div className="container">
             <div className="row">
               {
-                !loading ? (<><div className="col-md-12">
-                  
+                !loading ? (<div className="col-md-12">
                   <div className="d_profile de-flex">
                     <div className="de-flex-col">
                       <div className="profile_avatar">
@@ -84,59 +95,46 @@ const Author = () => {
                     <div className="profile_follow de-flex">
                       <div className="de-flex-col">
                         <div className="profile_follower"><span id="follower-count">{authorInfo.followers}</span> followers</div>
-                        <Link to="#" className="btn-main">
+                        <Link to="#" onClick={() =>follow()} className="btn-main follow" id="follow-btn">
                           Follow
                         </Link>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-md-12">
-                <div className="de_tab tab_simple">
-                  <AuthorItems nftcollection={nftCollections} authImage={pImage} />
-                </div>
-              </div></>): (
-                  <><div className="col-md-12">
+                </div>): (
+                  <div className="col-md-12">
                   <div className="d_profile de-flex">
                     <div className="de-flex-col">
-                      <div className="profile_avatar">
-                        <img src={AuthorImage} alt="" />
+                      <div className="profile_avatar skeleton-box" style={{width: 150, height:150, borderRadius:100}}>
+                        
   
                         <i className="fa fa-check"></i>
-                        <div className="profile_name">
+                        <div className="profile_name skeleton-box" style={{width:200, height: 150}}>
                           <h4>
-                            Monica Lucas
-                            <span className="profile_username">@monicaaaa</span>
-                            <span id="wallet" className="profile_wallet">
-                              UDHUHWudhwd78wdt7edb32uidbwyuidhg7wUHIFUHWewiqdj87dy7
-                            </span>
-                            <button id="btn_copy" title="Copy Text">
-                              Copy
-                            </button>
+                            
                           </h4>
                         </div>
                       </div>
                     </div>
                     <div className="profile_follow de-flex">
                       <div className="de-flex-col">
-                        <div className="profile_follower">573 followers</div>
-                        <Link to="#" className="btn-main">
+                        <div className="profile_follower">??? followers</div>
+                        <Link to="#" className="btn-main follow" id="follow-btn">
                           Follow
                         </Link>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-md-12">
-                <div className="de_tab tab_simple">
-                  <AuthorItems nftcollection={nftCollections} authImage={pImage} />
-                </div>
-              </div></>
                 
                 )
               }
 
-              
+              <div className="col-md-12">
+                <div className="de_tab tab_simple">
+                  <AuthorItems nftcollection={nftCollections} authImage={pImage} />
+                </div>
+              </div>
             </div>
           </div>
         </section>
