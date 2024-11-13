@@ -105,7 +105,7 @@ useEffect(() => {
                   </div>
                 </div>
 
-                <Link to="/item-details">
+                <Link to={"/item-details/"+newItem.nftId}>
                   <img
                     src={newItem.nftImage}
                     className="lazy nft__item_preview"
@@ -114,7 +114,7 @@ useEffect(() => {
                 </Link>
               </div>
               <div className="nft__item_info">
-                <Link to="/item-details">
+                <Link to={"/item-details/"+newItem.nftId}>
                   <h4>{newItem.title}</h4>
                 </Link>
                 <div className="nft__item_price">{newItem.price} ETH</div>
